@@ -1,7 +1,24 @@
-async function loginPage(){
-    let root=document.querySelector("#root");
-    root.innerHTML=`
-    <div class="row justify-content-center">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+    
+
+<body>
+
+
+    <div class="container">
+        <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card-group mb-0">
                     <div class="card p-4">
@@ -10,11 +27,11 @@ async function loginPage(){
                             <p class="text-muted">Sign In to your account</p>
                             <div class="input-group mb-3">
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <input type="text" class="form-control email" placeholder="Email">
+                                <input type="text" class="form-control" placeholder="Username">
                             </div>
                             <div class="input-group mb-4">
                                 <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                <input type="password" class="form-control password" placeholder="Password">
+                                <input type="password" class="form-control" placeholder="Password">
                             </div>
                             <div class="row">
                                 <div class="col-6">
@@ -39,67 +56,8 @@ async function loginPage(){
                 </div>
             </div>
         </div>
-    
-    `
+    </div>
 
-    let btnSignIn=document.querySelector(".btn btn-primary px-4");
-    btnSignIn.addEventListener("click",async(e)=>{
-        let inp1=document.querySelector(".email");
-        let inp2=document.querySelector(".password");
+</body>
 
-        let user={
-            email:inp1.value,
-            password:inp2.value,
-        };
-
-        let erors=[];
-
-        if(inp1.value=""){
-            erors.push("You must complete email field");
-            inp1.style.borderColor="red";
-        }
-        if(inp2.value==""){
-            inp2.style.borderColor="red";
-        }
-
-        if(erors.length>0){
-            let errorRoot=document.querySelector("#root");
-
-        }
-        try{
-            let loggedIn=await validateLogin(
-                user.email,
-                user.password
-            );
-            attachStartPage(loggedIn.id);
-
-        }catch(error){
-            attachErrorPage();
-        }
-    });
-
-    // let btnSignU
-}
-async function attachStartPage(){
-    // let root=document.querySelector("#root");
-    // root.innerHTML=`
-    // <div class="hederCentered">
-    //     <header>
-    //         <div class="wrap header--flex">
-    //             <h2 class="bestEvent"> The best Events</h2>
-                
-    //                 <div class="header--explore">
-    //                     <h2 >Home</h2>
-    //                     <h2>Explore</h2>
-    //                     <h2>Description</h2>
-    //                     <h2>Contact</h2>
-    //                 </div>
-
-                
-    //         </div>
-    //     </header>
-    // </div>
-
-
-    // `
-}
+</html>
