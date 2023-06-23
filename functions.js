@@ -1,6 +1,7 @@
 async function loginPage(){
     let root=document.querySelector("#root");
     root.innerHTML=`
+    <p>Hello</p>
     <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card-group mb-0">
