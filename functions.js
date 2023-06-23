@@ -191,10 +191,12 @@ async function attachNewEventPage(userId){
     let root=document.querySelector("#root");
 
     root.innerHTML=`
+    <ul class="error">
+    </ul>
     <div class="container bootstrap snippets bootdey">
     <div class="header">
       <ul class="nav nav-pills pull-right">
-        <li  class="home">Home</li>
+        <li  class="home events">Home</li>
         <li class="signOut">Sign Out</li>
        
       </ul>
@@ -216,7 +218,7 @@ async function attachNewEventPage(userId){
                 </div>
                 <div class="form-group">
                   <div class="col-sm-10">
-                    <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                    <input type="email" class="form-control" id="email" placeholder="Email">
                   </div>
                 </div>
 
@@ -242,6 +244,8 @@ async function attachNewEventPage(userId){
                       <span class="glyphicon glyphicon-share-alt"></span>
                       Register
                     </button>
+
+                    <button class="add">Add new Event</button>
                   </div>
                 </div>
           </form>
@@ -250,15 +254,84 @@ async function attachNewEventPage(userId){
   </div>    
     `
 
-    let btnHome=document.querySelector(".home");
-    btnHome.addEventListener("click",()=>{
-        attachHomePage(userId);
-    });
-
+  let btnEvents=document.querySelector(".events");
+  btnEvents=addEventListener("click",(e)=>{
+    attachHomePage(userId);
+  })
     let btnSignOut=document.querySelector(".signOut");
     btnSignOut.addEventListener("click",(e)=>{
         attachLoginPage();
-    })
+    });
+
+
+    let btnAddNewEvent=document.querySelector(".add");
+
+    btnAddNewEvent.addEventListener("click",async()=>{
+        let inp1=document.querySelector("#eventTitle");
+        let inp2=document.querySelector("#description");
+        let inp3=document.querySelector("#data");
+        let inp4=document.querySelector("#location");
+
+        let event={
+            eventTitle:inp1.value,
+            description:inp2.value,
+            data:inp3.value,
+            studentId:inp4.value
+
+        };
+
+        let erors=[];
+        if(inp1.value==""&&
+        inp2.value==""&&
+        inp3.value==""&&
+        inp4.value==""){
+            erors.push("Fields are not completed")
+        }
+        if(inp1.value==""){
+            erors.push("You must complete the  event title")
+            inp1.style.border="red";
+
+        }
+
+        if(inp2.value==""){
+            erors.push("You must complete description");
+            inp2.style.border="red";
+        }
+
+        if(inp3.value==""){
+            erors.push("You must complete the date");
+            inp3.style.border="red";
+        }
+
+        if(inp4.value==""){
+            erors.push("You must complete location");
+            inp4.style.border="red";
+        }
+
+
+        if(erors.length>0){
+            let errorContainer=document.querySelector(".error");
+            errorContainer.innerHTML="";
+            let h1=document.createElement("h1");
+            h1.textContent="Ooooops";
+
+            errorContainer.appendChild(h1);
+
+            for(let i=0;i<erors.length;i++){
+                let li=document.createElement("li");
+                li.textContent=erors[i];
+                errorContainer.appendChild(li);
+
+            }
+
+
+        }else{
+            let data=await addBook(book);
+            attachHomePage(userId);
+        }
+
+
+    });
 
 }
 
