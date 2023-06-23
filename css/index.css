@@ -629,3 +629,111 @@ body{margin-top:20px;
         border: 1px solid #e5e9f2;
         border-radius: .2rem;
     }
+    /*****Create**/
+    .jumbotron label {
+        font-size:12px;    
+    }
+    
+    .reg-icon{
+        color:#5bc0de;
+        font-weight:bold;
+        text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.4) !important;
+    }
+    
+    .nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+        color: white;
+        background-color: #5bc0de;
+    }
+    
+    .prj-name{
+        font-weight:bold;
+        color:#5bc0de;
+    }
+
+    .createEvent{
+        color: white;
+    }
+   
+
+    .col-sm-10{
+        margin-bottom: 20px;
+    }
+    .signOut{
+        margin-left: 10px;
+        
+    }
+
+    
+/****/
+    .wrap {
+        max-width: 1250px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    header {
+        background:blue;
+        padding: 1rem 0;
+        margin-bottom: 2rem;
+        size: 70%;
+    }
+    .header--flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header--logo a {
+        font-size: 1.25rem;
+        color: #fff;
+    }
+
+    .button {
+        background: blue;
+        color: #fff;
+        font-size: 1rem;
+        padding: .75rem 1.5rem;
+        border: 0;
+        margin: .5rem 0 .5rem 0;
+        display: block;
+        width: 210px;
+        text-align: center;
+        border-radius: .5rem;
+        font-weight: bold;
+        transition: background 0.2s;
+    }
+
+    .main--grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 1.5rem;
+        grid-auto-rows: 1fr;
+    }
+
+    /*card*/
+    .event--module {
+        background: blue;
+        border-radius: .5rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        display: block;
+    }
+
+    .event--title {
+        color: #fff;
+        font-weight: 700;
+        font-size: 1.25rem;
+    }
+
+    .event--label {
+        color: #fff;
+        font-size: .9rem;
+        font-weight: 400;
+        margin-bottom: .25rem;
+    }
+    /*update*/
+    .my-5{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
