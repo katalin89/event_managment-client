@@ -1,1 +1,1 @@
-attachStartPage();
+attachLoginPage();
