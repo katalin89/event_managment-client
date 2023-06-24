@@ -137,7 +137,7 @@ async function attachHomePage(userId){
         </div>
     </header>
 
-    <button class="button new-event">Add New Event</button>
+    <button id="newEvent" class="button new-event">Add New Event</button>
 
     <main>
         
@@ -152,50 +152,27 @@ async function attachHomePage(userId){
         attachLoginPage(data);
     })
 
-    let btnEvents=document.querySelector(".events");
-    btnEvents.addEventListener("click",(e)=>{
-        attachCard(data);
-    });
-
     let data = await allUserEvents(userId);
     attachCard(data);
 
-    let btnAddNewEvent=document.querySelector(".new-event");
+    let btnAddNewEvent=document.querySelector("#newEvent");
 
     btnAddNewEvent.addEventListener("click",(e)=>{
         attachNewEventPage(userId);
     });
-
-    let rowsContainer=document.querySelector(".root-events")
-    rowsContainer.addEventListener("click",async(e)=>{
-        e.preventDefault();
-        
-        let data=e.target.parentNode;
-        
-        let eventProperties=data.children;
-
-        const event={
-            eventId: eventProperties[0].innerHTML,
-            eventTitle:eventProperties[1].innerHTML,
-            eventDescription:eventProperties[2].innerHTML,
-            eventDate:eventProperties[3].innerHTML,
-            eventLocation:eventProperties[4].innerHTML,
-        };
-
-        attachUpdatePage(event);
-
-    })
-
 }
+
 async function attachNewEventPage(userId){
     let root=document.querySelector("#root");
 
     root.innerHTML=`
+    <ul class="error">
+    </ul>
     <div class="container bootstrap snippets bootdey">
     <div class="header">
       <ul class="nav nav-pills pull-right">
-        <li  class="home">Home</li>
-        <li class="signOut">Sign Out</li>
+        <li  class="home events" id="homeNav">Home</li>
+        <li class="signOut" id="signOutNav">Sign Out</li>
        
       </ul>
       <h3 class="createEvent">Create Event</h3>
@@ -216,19 +193,12 @@ async function attachNewEventPage(userId){
                 </div>
                 <div class="form-group">
                   <div class="col-sm-10">
-                    <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                    <input type="text" class="form-control" id="description" placeholder="Description">
                   </div>
-                </div>
-
-              
+                </div> 
                 <div class="form-group">
                   <div class="col-sm-10">
-                    <input type="description" class="form-control" id="description" placeholder="Description">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-sm-10">
-                    <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                    <input type="text" class="form-control" id="date" placeholder="Date">
                   </div>
                 </div>
 
@@ -242,6 +212,10 @@ async function attachNewEventPage(userId){
                       <span class="glyphicon glyphicon-share-alt"></span>
                       Register
                     </button>
+
+                    <button class="addEvent">Add new Event</button>
+                    <input id="userId" name="userId" class="userId" type="hidden" value="${userId}"/>
+
                   </div>
                 </div>
           </form>
@@ -250,15 +224,87 @@ async function attachNewEventPage(userId){
   </div>    
     `
 
-    let btnHome=document.querySelector(".home");
-    btnHome.addEventListener("click",()=>{
-        attachHomePage(userId);
-    });
+  /** 
+  let btnEvents=document.querySelector("#homeNav");
+  btnEvents=addEventListener("click",(e)=>{
+    attachHomePage(userId);
+  })
+  */
 
-    let btnSignOut=document.querySelector(".signOut");
+    let btnSignOut=document.querySelector("#signOutNav");
     btnSignOut.addEventListener("click",(e)=>{
         attachLoginPage();
-    })
+    });
+
+
+    let btnAddNewEvent=document.querySelector(".addEvent");
+
+    btnAddNewEvent.addEventListener("click",async()=>{
+        let inp1=document.querySelector("#eventTitle");
+        let inp2=document.querySelector("#description");
+        let inp3=document.querySelector("#date");
+        let inp4=document.querySelector("#location");
+
+        let event={
+            eventTitle:inp1.value,
+            description:inp2.value,
+            date:inp3.value,
+            location: inp4.value,
+            userId: userId
+        };
+
+        let erors=[];
+        if(inp1.value==""&&
+        inp2.value==""&&
+        inp3.value==""&&
+        inp4.value==""){
+            erors.push("Fields are not completed")
+        }
+        if(inp1.value==""){
+            erors.push("You must complete the  event title")
+            inp1.style.border="red";
+
+        }
+
+        if(inp2.value==""){
+            erors.push("You must complete description");
+            inp2.style.border="red";
+        }
+
+        if(inp3.value==""){
+            erors.push("You must complete the date");
+            inp3.style.border="red";
+        }
+
+        if(inp4.value==""){
+            erors.push("You must complete location");
+            inp4.style.border="red";
+        }
+
+
+        if(erors.length>0){
+            let errorContainer=document.querySelector(".error");
+            errorContainer.innerHTML="";
+            let h1=document.createElement("h1");
+            h1.textContent="Ooooops";
+
+            errorContainer.appendChild(h1);
+
+            for(let i=0;i<erors.length;i++){
+                let li=document.createElement("li");
+                li.textContent=erors[i];
+                errorContainer.appendChild(li);
+
+            }
+
+
+        }else{
+            let data=await addEvent(event);
+            attachHomePage(userId);
+        }
+
+
+    });
 
 }
 
@@ -286,103 +332,35 @@ async function attachUpdatePage(event,userId){
                                         <!-- First Name -->
                                         <div class="col-md-6">
                                             <label class="form-label">Event Title *</label>
-                                            <input type="text" class="form-control" placeholder="${event.eventTitle}" aria-label="First name">
+                                            <input type="text" id="eventTitle" class="form-control" value="${event.eventTitle}" aria-label="First name">
                                         </div>
                                         <!-- Last name -->
                                         <div class="col-md-6">
                                             <label class="form-label">Description*</label>
-                                            <input type="text" class="form-control" placeholder="${event.description}" aria-label="description" >
+                                            <input type="text" id="description" class="form-control" value="${event.description}" aria-label="description" >
                                         </div>
                                         <!-- Phone number -->
                                         <div class="col-md-6">
-                                            <label class="form-label">Data *</label>
-                                            <input type="text" class="form-control" placeholder="${event.date}" aria-label="date" >
+                                            <label class="form-label">Date *</label>
+                                            <input type="text" id="date" class="form-control" value="${event.date}" aria-label="date" >
                                         </div>
                                         <!-- Mobile number -->
                                         <div class="col-md-6">
                                             <label class="form-label">Location *</label>
-                                            <input type="text" class="form-control" placeholder="${event.location}" aria-label="location" >
+                                            <input type="text" id="location" class="form-control" value="${event.location}" aria-label="location" >
                                         </div>
-                                        <button class="remove">Remove</button>
-                                       
-                                        
-                                      
+                                        <input id="userId" name="userId" class="userId" type="hidden" value="${userId}"/>         
                                 </div>
-                            </div>
-                            <!-- Upload profile -->
-                            <div class="col-xxl-4">
-                                <div class="bg-secondary-soft px-4 py-5 rounded">
-                                    <div class="row g-3">
-                                        <h4 class="mb-4 mt-0">Upload event pic</h4>
-                                        <div class="text-center">
-                                            <!-- Image upload -->
-                                            <div class="square position-relative display-2 mb-3">
-                                                <i class="fas fa-fw fa-user position-absolute top-50 start-50 translate-middle text-secondary"></i>
-                                            </div>
-                                            <!-- Button -->
-                                            <input type="file" id="customFile" name="file" hidden="">
-                                            <label class="btn btn-success-soft btn-block" for="customFile">Upload</label>
-                                            <button type="button" class="btn btn-danger-soft">Remove</button>
-                                            <!-- Content -->
-                                            <p class="text-muted mt-3 mb-0"><span class="me-1">Note:</span>Minimum size 300px x 300px</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> <!-- Row END -->
-        
-                        <!-- Social media detail -->
-                        <div class="row mb-5 gx-5">
-                            <div class="col-xxl-6 mb-5 mb-xxl-0">
-                                <div class="bg-secondary-soft px-4 py-5 rounded">
-                                    <div class="row g-3">
-                                        <h4 class="mb-4 mt-0">Social media detail</h4>
-                                        <!-- Facebook -->
-                                        <div class="col-md-6">
-                                            <label class="form-label"><i class="fab fa-fw fa-facebook me-2 text-facebook"></i>Facebook *</label>
-                                            <input type="text" class="form-control" placeholder="" aria-label="Facebook" value="http://www.facebook.com">
-                                        </div>
-                                        <!-- Twitter -->
-                                        <div class="col-md-6">
-                                            <label class="form-label"><i class="fab fa-fw fa-twitter text-twitter me-2"></i>Twitter *</label>
-                                            <input type="text" class="form-control" placeholder="" aria-label="Twitter" value="http://www.twitter.com">
-                                        </div>
-                                        <!-- Linkedin -->
-                                        <div class="col-md-6">
-                                            <label class="form-label"><i class="fab fa-fw fa-linkedin-in text-linkedin me-2"></i>Linkedin *</label>
-                                            <input type="text" class="form-control" placeholder="" aria-label="Linkedin" value="http://www.linkedin.com">
-                                        </div>
-                                        <!-- Instragram -->
-                                        <div class="col-md-6">
-                                            <label class="form-label"><i class="fab fa-fw fa-instagram text-instagram me-2"></i>Instagram *</label>
-                                            <input type="text" class="form-control" placeholder="" aria-label="Instragram" value="http://www.instragram.com">
-                                        </div>
-                                        <!-- Dribble -->
-                                        <div class="col-md-6">
-                                            <label class="form-label"><i class="fas fa-fw fa-basketball-ball text-dribbble me-2"></i>Dribble *</label>
-                                            <input type="text" class="form-control" placeholder="" aria-label="Dribble" value="http://www.dribble.com">
-                                        </div>
-                                        <!-- Pinterest -->
-                                        <div class="col-md-6">
-                                            <label class="form-label"><i class="fab fa-fw fa-pinterest text-pinterest"></i>Pinterest *</label>
-                                            <input type="text" class="form-control" placeholder="" aria-label="Pinterest" value="http://www.pinterest.com">
-                                        </div>
-                                    </div> <!-- Row END -->
-                                </div>
-                            </div>
-        
-                           
+                            </div>               
                         </div> <!-- Row END -->
                         <!-- button -->
                         <div class="gap-3 d-md-flex justify-content-md-end text-center">
-                            <button type="button" class="btn btn-danger btn-lg">Delete profile</button>
-                            <button type="button" class="update">Update profile</button>
-                            
+                            <button type="button" class="btn btn-danger btn-lg">Delete Event</button>
+                            <button type="button" class="updateBtn">Update Event</button>
                         </div>
                     </form> <!-- Form END -->
                 </div>
-            </div>
-       
+            </div>   
     `;
 
     let btnHome=document.querySelector(".home");
@@ -390,19 +368,22 @@ async function attachUpdatePage(event,userId){
         attachHomePage(userId);
     });
 
-    let btnUpdate=document.querySelector(".remove");
+    let btnUpdate=document.querySelector(".updateBtn");
     btnUpdate.addEventListener("click",async()=>{
-        let inp1=document.querySelector(".eventTitle");
-        let inp2=document.querySelector(".description");
-        let inp3 = document.querySelector(".date");
-        let inp4=document.querySelector(".location").value;
+        let inp1=document.querySelector("#eventTitle");
+        let inp2=document.querySelector("#description");
+        let inp3 = document.querySelector("#date");
+        let inp4=document.querySelector("#location");
+        let inp5=document.querySelector("#userId").value;
+
 
         let usersEvent={
             id:event.id,
             eventTitle:inp1.value,
             description:inp2.value,
             date:inp3.value,
-            location:inp3.value,
+            location:inp4.value,
+            userId: inp5
         };
 
         let erors= [];
@@ -440,7 +421,7 @@ async function attachUpdatePage(event,userId){
 
         if(erors.length==0){
             let data=await updateEventApi(usersEvent);
-            attachHomePage(usersEvent);
+            attachHomePage(inp5);
         }
     });
 
@@ -535,7 +516,7 @@ async function attachSignUp(){
 }
 async function deleteEvent(e){
     let parent=e.parentNode;
-    let bookId=parent.children[0].value;
+    let eventId=parent.children[0].value;
     await deleteEventById(eventId);
     let userId=document.querySelector(".userId").value;
     attachHomePage(userId);
@@ -546,13 +527,13 @@ async function updateEvent(e){
     let event={
         id:parent.children[0].value,
         eventTitle:parent.children[1].textContent,
-        description:parent.children[2].textContent,
-        data:parent.children[3].textContent,
-        location:parent.children[4].textContent,
+        description:parent.children[2].value,
+        date:parent.children[3].textContent,
+        location:parent.children[4].value,
 
     }
 
-    let userId=document.querySelector("userId").value;
+    let userId=document.querySelector(".userId").value;
     attachUpdatePage(event,userId);
 }
 
@@ -576,13 +557,15 @@ function createCard(event){
     a.classList.add("event--module");
     a.classList.add("event--module");
     a.innerHTML=`
-    <input name="eventId class="eventId" type="hidden" value="${event.id}"/>
-    <h2 class="event--lable">${event.eventTitle}</h2
-    <h3 class="event--title">${event.description}</h3>
+    <input name="eventId" class="eventId" type="hidden" value="${event.id}"/>
+
+
+    <h2 class="event--lable">${event.eventTitle}</h2>
+    <input name="eventDescription" class="eventDescription" type="hidden" value="${event.description}"/>
     <h3 class="event--title">${event.date}</h3>
+    <input name="eventLoc" class="eventLoc" type="hidden" value="${event.location}"/>
     <button class="delete" onclick="deleteEvent(this)">Delete</button>
     <button class="update" onclick="updateEvent(this)">Update</update>
-
     `;
     return a;
 }
