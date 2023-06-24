@@ -56,7 +56,7 @@ async function addEvent(event){
 }
 
 async function deleteEventById(eventId){
-    let data=await api(`users/deleteEventByEventTitle${eventId}`,'DELETE');
+    let data=await api(`users/deleteEventByEventTitle/${eventId}`,'DELETE');
 }
 
 async function updateEventApi(event){
